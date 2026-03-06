@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manchester Pipe and Site Services Limited | Industrial Infrastructure</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #0a0b0d;
+            --bg-deep: #050607;
+            --bg-card: #15191d;
+            --neon-cyan: #00f2ff;
+            --neon-orange: #ff9d00;
+            --neon-glow: 0 0 15px rgba(0, 242, 255, 0.4);
+            --text-gray: #b0b0b0;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, .navbar-brand { font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--neon-cyan); border-radius: 5px; }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(10, 11, 13, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 20px 0;
+            transition: var(--transition);
+        }
+        .navbar.scrolled { padding: 10px 0; background: var(--bg-deep); }
+        
+        .nav-link {
+            color: #fff !important;
+            font-weight: 500;
+            margin: 0 15px;
+            position: relative;
+            transition: var(--transition);
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: var(--neon-cyan);
+            transition: var(--transition);
+        }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .nav-link:hover { color: var(--neon-cyan) !important; }
+
+        /* View Management */
+        .view-section { display: none; min-height: 80vh; animation: pageEnter 0.6s ease-out forwards; }
+        .view-section.active { display: block; }
+        @keyframes pageEnter { 
+            from { opacity: 0; transform: translateY(30px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        /* Hero Styling */
+        .hero-carousel { height: 90vh; }
+        .hero-slide {
+            height: 90vh;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.9) 20%, rgba(0,0,0,0.2));
+        }
+        .hero-content { position: relative; z-index: 2; max-width: 800px; }
+        .hero-title { font-size: 4rem; line-height: 1.1; margin-bottom: 1.5rem; text-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        
+        /* Buttons */
+        .btn-neon {
+            background: transparent;
+            border: 2px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 15px 35px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            z-index: 1;
+        }
+        .btn-neon::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: var(--neon-cyan);
+            transition: var(--transition);
+            z-index: -1;
+        }
+        .btn-neon:hover { color: #000; box-shadow: 0 0 30px var(--neon-cyan); }
+        .btn-neon:hover::before { left: 0; }
+
+        /* Cards & Sections */
+        .section-padding { padding: 100px 0; }
+        .glass-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 40px;
+            border-radius: 10px;
+            transition: var(--transition);
+            position: relative;
+        }
+        .glass-card:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: var(--neon-glow);
+            transform: translateY(-10px);
+        }
+        .icon-box { font-size: 3.5rem; color: var(--neon-cyan); margin-bottom: 1.5rem; display: block; }
+        
+        /* Counters */
+        .counter-item h2 { font-size: 3.5rem; color: var(--neon-cyan); margin-bottom: 0; }
+
+        /* Gallery System */
+        .gallery-filter { margin-bottom: 40px; }
+        .filter-btn {
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 25px;
+            margin: 0 5px;
+            border-radius: 30px;
+            transition: var(--transition);
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            border-color: var(--neon-cyan);
+        }
+        .gallery-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            height: 300px;
+            margin-bottom: 30px;
+            cursor: pointer;
+        }
+        .gallery-card img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
+        .gallery-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 242, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+            color: #000;
+            text-align: center;
+            padding: 20px;
+        }
+        .gallery-card:hover .gallery-overlay { opacity: 1; }
+        .gallery-card:hover img { transform: scale(1.1); }
+
+        /* Testimonials */
+        .testi-card { border-left: 4px solid var(--neon-cyan); background: rgba(255,255,255,0.02); padding: 30px; }
+
+        /* Contact Form */
+        .form-control {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 12px;
+            transition: var(--transition);
+        }
+        .form-control:focus {
+            background: rgba(255,255,255,0.08);
+            border-color: var(--neon-cyan);
+            box-shadow: var(--neon-glow);
+            color: #fff;
+        }
+
+        /* Footer */
+        footer { background: var(--bg-deep); padding: 80px 0 30px; border-top: 1px solid rgba(0, 242, 255, 0.2); }
+        .social-link {
+            width: 45px; height: 45px;
+            display: inline-flex;
+            align-items: center; justify-content: center;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            border-radius: 50%;
+            margin-right: 15px;
+            transition: var(--transition);
+        }
+        .social-link:hover { background: var(--neon-cyan); color: #000; box-shadow: var(--neon-glow); }
+
+        /* Timeline for About */
+        .timeline-box { position: relative; padding-left: 30px; border-left: 2px solid var(--neon-cyan); margin-bottom: 40px; }
+        .timeline-dot {
+            position: absolute;
+            left: -9px; top: 0;
+            width: 16px; height: 16px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            box-shadow: var(--neon-glow);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sticky Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="javascript:void(0)" onclick="showView('home')">
+                <i class="fas fa-industry me-3 text-info fs-3"></i>
+                <div class="lh-1">
+                    <span class="d-block fs-5 fw-bold">MANCHESTER PIPE</span>
+                    <small class="text-secondary" style="font-size: 0.6rem; letter-spacing: 1px;">& SITE SERVICES LTD</small>
+                </div>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto text-uppercase small fw-bold">
+                    <li class="nav-item"><a class="nav-link" id="nav-home" onclick="showView('home')">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" id="nav-about" onclick="showView('about')">The Company</a></li>
+                    <li class="nav-item"><a class="nav-link" id="nav-services" onclick="showView('services')">Our Services</a></li>
+                    <li class="nav-item"><a class="nav-link" id="nav-projects" onclick="showView('projects')">Portfolio</a></li>
+                    <li class="nav-item"><a class="nav-link" id="nav-contact" onclick="showView('contact')">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        <!-- HOME VIEW -->
+        <div id="view-home" class="view-section active">
+            <!-- Hero Carousel -->
+            <div id="hero" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1920')">
+                            <div class="hero-overlay"></div>
+                            <div class="container hero-content">
+                                <h1 class="hero-title fw-bold">PRECISION <span class="text-info">PIPELINE</span> INSTALLATION</h1>
+                                <p class="lead text-light mb-4 w-75">UK leaders in specialist industrial pipeline systems, drainage, and civil engineering infrastructure.</p>
+                                <div class="d-flex gap-3">
+                                    <button class="btn btn-neon" onclick="showView('services')">View Expertise</button>
+                                    <button class="btn btn-outline-light px-4 py-3 border-2 fw-bold" onclick="showView('contact')">Get Quote</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1920')">
+                            <div class="hero-overlay"></div>
+                            <div class="container hero-content">
+                                <h1 class="hero-title fw-bold">EXCELLENCE IN <span class="text-info">CIVIL</span> WORKS</h1>
+                                <p class="lead text-light mb-4 w-75">From site preparation to structural foundations, we deliver reliability through engineering mastery.</p>
+                                <button class="btn btn-neon" onclick="showView('projects')">Our Portfolio</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Grid -->
+            <section class="section-padding">
+                <div class="container">
+                    <div class="text-center mb-5">
+                        <h6 class="text-info fw-bold">WHY PARTNER WITH US</h6>
+                        <h2 class="display-5 fw-bold">ENGINEERING <span class="text-info">SUPERIORITY</span></h2>
+                    </div>
+                    <div class="row g-4 mt-2">
+                        <div class="col-lg-4">
+                            <div class="glass-card">
+                                <i class="fas fa-hard-hat icon-box"></i>
+                                <h4>Safety First</h4>
+                                <p class="text-secondary">We maintain a 100% safety record across all hazardous industrial sites through rigorous training.</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="glass-card">
+                                <i class="fas fa-microchip icon-box"></i>
+                                <h4>Modern Tech</h4>
+                                <p class="text-secondary">Utilizing laser-guided alignment and non-destructive testing for unmatched precision.</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="glass-card">
+                                <i class="fas fa-clock icon-box"></i>
+                                <h4>24/7 Response</h4>
+                                <p class="text-secondary">Emergency pipeline repair and infrastructure support available around the clock.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Bar -->
+            <div class="bg-deep py-5 border-top border-bottom border-secondary">
+                <div class="container">
+                    <div class="row text-center g-4">
+                        <div class="col-6 col-md-3 counter-item">
+                            <h2 data-target="15">0</h2>
+                            <p class="small text-uppercase text-secondary">Years Excellence</p>
+                        </div>
+                        <div class="col-6 col-md-3 counter-item">
+                            <h2 data-target="1200">0</h2>
+                            <p class="small text-uppercase text-secondary">Projects Completed</p>
+                        </div>
+                        <div class="col-6 col-md-3 counter-item">
+                            <h2 data-target="85">0</h2>
+                            <p class="small text-uppercase text-secondary">Expert Engineers</p>
+                        </div>
+                        <div class="col-6 col-md-3 counter-item">
+                            <h2 data-target="100">0</h2>
+                            <p class="small text-uppercase text-secondary">CSCS Certified</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonials -->
+            <section class="section-padding">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <h2 class="fw-bold">WHAT OUR <span class="text-info">CLIENTS</span> SAY</h2>
+                            <p class="text-secondary mt-3">We have built long-term partnerships with the UK's leading property developers and utility providers.</p>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="testi-card">
+                                        <p class="fst-italic text-secondary">"MPSS Limited handled our complex drainage diversion with absolute professionalism. Their technical knowledge is second to none."</p>
+                                        <h6 class="text-info mt-3">— Lead Engineer, Regional Water Board</h6>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="testi-card">
+                                        <p class="fst-italic text-secondary">"A reliable partner for all our site preparation works. They consistently deliver ahead of schedule and within budget."</p>
+                                        <h6 class="text-info mt-3">— Director, National Construction Group</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ABOUT VIEW -->
+        <div id="view-about" class="view-section">
+            <section class="section-padding">
+                <div class="container">
+                    <div class="row align-items-center mb-5">
+                        <div class="col-lg-6">
+                            <h6 class="text-info fw-bold">ESTABLISHED 2008</h6>
+                            <h2 class="display-5 fw-bold mb-4">A HERITAGE OF <span class="text-info">QUALITY</span></h2>
+                            <p class="text-secondary lead">Manchester Pipe and Site Services Limited was founded with a singular mission: to provide world-class infrastructure solutions to the North West's booming industrial sector.</p>
+                            <p class="text-secondary">Over the last decade, we have expanded our reach nationwide, becoming the primary choice for specialist pipeline installation and civil works. Our team comprises some of the most experienced site managers and engineers in the industry.</p>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="p-4 border border-info rounded">
+                                <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=800" class="img-fluid rounded" alt="About MPSS">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-5">
+                        <div class="col-md-4">
+                            <div class="timeline-box">
+                                <div class="timeline-dot"></div>
+                                <h4 class="text-info">2008</h4>
+                                <p>Launched in Manchester with a focus on local drainage repair.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="timeline-box">
+                                <div class="timeline-dot"></div>
+                                <h4 class="text-info">2015</h4>
+                                <p>Expanded into nationwide pipeline installation for the energy sector.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="timeline-box">
+                                <div class="timeline-dot"></div>
+                                <h4 class="text-info">2023</h4>
+                                <p>Acquired major civil works contracts for regional airport expansion.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- SERVICES VIEW -->
+        <div id="view-services" class="view-section">
+            <section class="section-padding">
+                <div class="container">
+                    <div class="text-center mb-5">
+                        <h2 class="display-5 fw-bold">OUR <span class="text-info">SPECIALISMS</span></h2>
+                        <p class="text-secondary">Comprehensive site services from the ground down.</p>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="glass-card d-flex">
+                                <i class="fas fa-oil-can icon-box me-4"></i>
+                                <div>
+                                    <h4 class="text-info">Industrial Pipelines</h4>
+                                    <p class="text-secondary">Installation and testing of large-bore industrial pipework, including steam, water, and chemical transport systems.</p>
+                                    <ul class="text-secondary small">
+                                        <li>High-pressure testing</li>
+                                        <li>Fusion welding & Fabrication</li>
+                                        <li>CCTV Inspections</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="glass-card d-flex">
+                                <i class="fas fa-water icon-box me-4"></i>
+                                <div>
+                                    <h4 class="text-info">Drainage Systems</h4>
+                                    <p class="text-secondary">Complete foul and surface water drainage design and implementation for commercial developments.</p>
+                                    <ul class="text-secondary small">
+                                        <li>Attenuation tank install</li>
+                                        <li>Deep drainage excavation</li>
+                                        <li>SUDS Compliant solutions</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="glass-card d-flex">
+                                <i class="fas fa-city icon-box me-4"></i>
+                                <div>
+                                    <h4 class="text-info">Civil Engineering</h4>
+                                    <p class="text-secondary">Groundworks, foundations, and reinforced concrete structures for industrial units and warehouses.</p>
+                                    <ul class="text-secondary small">
+                                        <li>Piling & Ring beams</li>
+                                        <li>Road surfacing & Curbs</li>
+                                        <li>Retaining walls</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="glass-card d-flex">
+                                <i class="fas fa-hammer icon-box me-4"></i>
+                                <div>
+                                    <h4 class="text-info">Maintenance & Repair</h4>
+                                    <p class="text-secondary">Proactive maintenance programs to extend the life of your site infrastructure and prevent costly downtime.</p>
+                                    <ul class="text-secondary small">
+                                        <li>24-hour leak repair</li>
+                                        <li>Structural remedial works</li>
+                                        <li>Asset management audits</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- PROJECTS VIEW -->
+        <div id="view-projects" class="view-section">
+            <section class="section-padding">
+                <div class="container">
+                    <div class="text-center mb-5">
+                        <h2 class="display-5 fw-bold">PORTFOLIO <span class="text-info">GALLERY</span></h2>
+                        <div class="gallery-filter mt-4">
+                            <button class="filter-btn active" onclick="filterGallery('all')">All Works</button>
+                            <button class="filter-btn" onclick="filterGallery('pipe')">Pipelines</button>
+                            <button class="filter-btn" onclick="filterGallery('civil')">Civil</button>
+                            <button class="filter-btn" onclick="filterGallery('drain')">Drainage</button>
+                        </div>
+                    </div>
+                    <div class="row g-4" id="gallery-root">
+                        <!-- Items -->
+                        <div class="col-md-4 gallery-item" data-type="pipe">
+                            <div class="gallery-card">
+                                <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600" alt="Pipe">
+                                <div class="gallery-overlay">
+                                    <h5>Industrial Main Install</h5>
+                                    <p>North West Project</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 gallery-item" data-type="civil">
+                            <div class="gallery-card">
+                                <img src="https://images.unsplash.com/photo-1517089596392-fb9a9033e05b?w=600" alt="Civil">
+                                <div class="gallery-overlay">
+                                    <h5>Site Foundation Preparation</h5>
+                                    <p>Commercial Hub</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 gallery-item" data-type="drain">
+                            <div class="gallery-card">
+                                <img src="https://images.unsplash.com/photo-1581094288338-2314dddb7ecc?w=600" alt="Drain">
+                                <div class="gallery-overlay">
+                                    <h5>Deep Drainage Network</h5>
+                                    <p>Logistics Park</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 gallery-item" data-type="pipe">
+                            <div class="gallery-card">
+                                <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600" alt="Pipe">
+                                <div class="gallery-overlay">
+                                    <h5>Hazardous Material Pipework</h5>
+                                    <p>Energy Plant</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 gallery-item" data-type="civil">
+                            <div class="gallery-card">
+                                <img src="https://images.unsplash.com/photo-1503387762-592dea58ef21?w=600" alt="Civil">
+                                <div class="gallery-overlay">
+                                    <h5>Reinforced Concrete Slabs</h5>
+                                    <p>Airport Expansion</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 gallery-item" data-type="drain">
+                            <div class="gallery-card">
+                                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600" alt="Drain">
+                                <div class="gallery-overlay">
+                                    <h5>Surface Water Attenuation</h5>
+                                    <p>Residential Masterplan</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- CONTACT VIEW -->
+        <div id="view-contact" class="view-section">
+            <section class="section-padding">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <h2 class="fw-bold mb-4">LET'S BUILD <span class="text-info">TOGETHER</span></h2>
+                            <p class="text-secondary mb-5">Our technical team is available to discuss tenders, site surveys, and emergency repair works.</p>
+                            
+                            <div class="mb-4 d-flex align-items-center">
+                                <div class="social-link me-3"><i class="fas fa-phone"></i></div>
+                                <div><h6 class="mb-0">Main Office</h6><p class="text-info small">+44 161 123 4567</p></div>
+                            </div>
+                            <div class="mb-4 d-flex align-items-center">
+                                <div class="social-link me-3"><i class="fas fa-envelope"></i></div>
+                                <div><h6 class="mb-0">Tenders & Estimates</h6><p class="text-info small">projects@mpss-ltd.com</p></div>
+                            </div>
+                            <div class="mb-5 d-flex align-items-center">
+                                <div class="social-link me-3"><i class="fas fa-map-marker-alt"></i></div>
+                                <div><h6 class="mb-0">Headquarters</h6><p class="text-secondary small">Manchester Business Park, Unit 12A, M1 4RT</p></div>
+                            </div>
+
+                            <div class="p-2 border border-secondary rounded overflow-hidden" style="height: 250px;">
+                                <iframe width="100%" height="100%" frameborder="0" src="https://maps.google.com/maps?q=Manchester&t=&z=13&ie=UTF8&iwloc=&output=embed" style="filter: grayscale(1) invert(0.9);"></iframe>
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
+                            <div class="glass-card mt-4 mt-lg-0">
+                                <h4 class="mb-4">PROJECT INQUIRY FORM</h4>
+                                <form id="contactFormMain">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label small text-secondary">Full Name</label>
+                                            <input type="text" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label small text-secondary">Company</label>
+                                            <input type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label small text-secondary">Work Type</label>
+                                        <select class="form-select bg-dark text-white border-secondary">
+                                            <option>Pipeline Installation</option>
+                                            <option>Civil Engineering</option>
+                                            <option>Drainage Works</option>
+                                            <option>Maintenance Contract</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label small text-secondary">Message</label>
+                                        <textarea class="form-control" rows="6" placeholder="Describe your project requirements..." required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-neon w-100 py-3">Submit Proposal Request</button>
+                                </form>
+                                <div id="formSuccess" class="alert alert-success mt-4 d-none">
+                                    <i class="fas fa-check-circle me-2"></i> Thank you! Your inquiry has been sent to our estimators.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h4 class="text-info mb-4">MANCHESTER PIPE</h4>
+                    <p class="text-secondary">Premier industrial site services provider in the UK. Specializing in high-performance infrastructure for a changing world.</p>
+                    <div class="mt-4">
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h6 class="text-white mb-4">Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-secondary text-decoration-none" onclick="showView('home')">Home</a></li>
+                        <li><a href="#" class="text-secondary text-decoration-none" onclick="showView('about')">Company</a></li>
+                        <li><a href="#" class="text-secondary text-decoration-none" onclick="showView('services')">Expertise</a></li>
+                        <li><a href="#" class="text-secondary text-decoration-none" onclick="showView('projects')">Portfolio</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <h6 class="text-white mb-4">Services</h6>
+                    <ul class="list-unstyled">
+                        <li class="text-secondary">Pipeline Systems</li>
+                        <li class="text-secondary">Deep Drainage</li>
+                        <li class="text-secondary">Site Foundations</li>
+                        <li class="text-secondary">Emergency Repairs</li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <h6 class="text-white mb-4">Accreditation</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge bg-secondary">ISO 9001</span>
+                        <span class="badge bg-secondary">CSCS GOLD</span>
+                        <span class="badge bg-secondary">CHAS</span>
+                        <span class="badge bg-secondary">SafeContractor</span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-5 pt-4 border-top border-secondary">
+                <p class="text-secondary small">&copy; 2024 Manchester Pipe and Site Services Limited. Registered in England & Wales.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Navigation Handler
+        function showView(viewName) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+
+            const target = document.getElementById('view-' + viewName);
+            const navLink = document.getElementById('nav-' + viewName);
+
+            if (target) target.classList.add('active');
+            if (navLink) navLink.classList.add('active');
+
+            window.scrollTo(0, 0);
+
+            // Trigger counters if home
+            if (viewName === 'home') initCounters();
+
+            // Handle Mobile Collapse
+            const navCollapse = document.getElementById('navbarNav');
+            if (navCollapse.classList.contains('show')) {
+                new bootstrap.Collapse(navCollapse).hide();
+            }
+        }
+
+        // Stats Counter Animation
+        function initCounters() {
+            const counters = document.querySelectorAll('.counter-item h2');
+            const speed = 200;
+
+            counters.forEach(counter => {
+                const animate = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    const inc = target / speed;
+
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + inc);
+                        setTimeout(animate, 10);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                animate();
+            });
+        }
+
+        // Gallery Filtering
+        function filterGallery(type) {
+            const btns = document.querySelectorAll('.filter-btn');
+            const items = document.querySelectorAll('.gallery-item');
+
+            btns.forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            items.forEach(item => {
+                if (type === 'all' || item.getAttribute('data-type') === type) {
+                    item.style.display = 'block';
+                    item.style.animation = 'pageEnter 0.4s ease-out forwards';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Form Submission
+        document.getElementById('contactFormMain').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('button');
+            const success = document.getElementById('formSuccess');
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.classList.add('d-none');
+                success.classList.remove('d-none');
+                this.reset();
+            }, 1500);
+        });
+
+        // Navbar Scroll Effect
+        window.onscroll = function() {
+            const nav = document.getElementById('mainNav');
+            if (window.pageYOffset > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        };
+
+        // Initialize Home
+        window.addEventListener('load', () => {
+            showView('home');
+        });
+    </script>
+</body>
+</html>
